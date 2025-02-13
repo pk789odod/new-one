@@ -189,15 +189,15 @@
     let clickCount = 0;
     const littleBitMessages = [
       "Are you sure?",
-      "i'll cook for you? 🧑‍🍳",
+      "I'll cook for you? 🍳",
       "How about medium love?",
       "Pretty please? 🥺",
       "I'll wait... ⏳",
-      "i"ll masaage your feet! 💓",
+      "i'll massage your feet! 💓",
       "Let's negotiate! 🤝",
-      "Oranges and chips? 🍪",
+      "Oranges and chips? 🍊🍟",
       "Final offer: Biryani? 💖",
-      "Pretty please ! 😍"
+      "Pretty please ! 😹"
     ];
 
     function handleLittleBit() {
@@ -219,10 +219,10 @@
       
       clickCount++;
       
-      // Increase Yes button size faster (using a multiplier of 1.2)
+      // Increase Yes button size faster (changed multiplier from 1.2 to 1.3)
       const yesBtn = document.querySelector('.yes-btn');
       const currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
-      yesBtn.style.fontSize = `${currentSize * 1.2}px`;
+      yesBtn.style.fontSize = `${currentSize * 1.3}px`;
     }
 
     // Yes button handler with hug emoji rain effect

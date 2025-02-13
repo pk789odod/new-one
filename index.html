@@ -2,128 +2,230 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Do You Love Me?</title>
-  <!-- Google Font for a modern look -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    /* Reset and global styles */
-    * {
-      box-sizing: border-box;
+    /* Body & Background */
+    body {
       margin: 0;
       padding: 0;
-    }
-    body {
-      font-family: 'Montserrat', sans-serif;
-      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-      min-height: 100vh;
+      font-family: 'Trebuchet MS', sans-serif;
+      color: #fff;
+      background: linear-gradient(135deg, #ffafbd 0%, #ffc3a0 100%);
+      /* Adjust or replace with a romantic background image if you like:
+      background: url('your-romantic-image.jpg') center/cover no-repeat;
+      */
+      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
+      overflow: hidden; /* so we don't get scrollbars from animations */
     }
-    /* Container styling similar to the referenced site */
+
+    /* Container for everything */
     .container {
-      background: #fff;
-      border-radius: 15px;
-      padding: 40px;
+      position: relative;
       text-align: center;
-      max-width: 400px;
-      width: 90%;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-      animation: fadeIn 1.5s ease;
+      z-index: 2; /* place above the floating hearts */
     }
+
+    /* Main question text */
     h1 {
-      font-size: 2em;
-      color: #333;
-      margin-bottom: 20px;
+      font-size: 3rem;
+      margin-bottom: 2rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
-    /* Button styles with smooth hover effects */
-    .button {
-      display: inline-block;
-      margin: 10px;
-      padding: 15px 25px;
-      font-size: 1em;
-      border: none;
-      border-radius: 30px;
+
+    /* Buttons */
+    .btn {
       cursor: pointer;
-      transition: background 0.3s, transform 0.3s;
+      background-color: #fff;
+      color: #e91e63;
+      border: none;
+      padding: 1rem 2rem;
+      margin: 0 1rem;
+      font-size: 1.2rem;
+      border-radius: 8px;
+      transition: transform 0.2s ease;
     }
-    .button:hover {
-      transform: scale(1.05);
+    .btn:hover {
+      transform: scale(1.1);
     }
-    .yes {
-      background-color: #4caf50;
-      color: #fff;
+
+    /* Hidden elements */
+    #catImg, #finalMessage {
+      display: none;
     }
-    .little-bit {
-      background-color: #ff9800;
-      color: #fff;
+
+    /* Final message after selecting Yes */
+    #finalMessage {
+      font-size: 2rem;
+      margin-top: 2rem;
+      font-weight: bold;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
     }
-    .message {
-      margin-top: 30px;
-      font-size: 1.2em;
-      color: #555;
-      line-height: 1.5;
+
+    /* Crying cat image styling */
+    #catImg {
+      margin-top: 2rem;
+      width: 200px;
+      animation: shake 0.5s infinite alternate;
     }
-    /* Simple fadeIn animation */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+
+    @keyframes shake {
+      from { transform: translateX(0); }
+      to { transform: translateX(5px); }
+    }
+
+    /* Floating hearts container (behind main content) */
+    .hearts-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none; /* so clicks pass through */
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    /* Individual heart styling */
+    .heart {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background: url('https://cdn-icons-png.flaticon.com/512/2107/2107952.png') center/cover no-repeat;
+      opacity: 0.7;
+      animation: floatUp 5s linear infinite;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(100vh) scale(0.5);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateY(-10%) scale(1.2);
+        opacity: 0;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Do you love me?</h1>
-    <button class="button yes" id="yesButton">Yes</button>
-    <button class="button little-bit" id="littleBitButton">Little Bit</button>
-    <div class="message" id="messageArea"></div>
+  <!-- Floating Hearts Container -->
+  <div class="hearts-container" id="heartsContainer"></div>
+
+  <!-- Main Content -->
+  <div class="container" id="mainContainer">
+    <h1 id="questionText">Do you love me?</h1>
+    <button class="btn" id="yesBtn">Yes</button>
+    <button class="btn" id="littleBitBtn">Little bit</button>
+
+    <!-- Crying Cat Image (shown on "No??") -->
+    <img id="catImg" src="YOUR_CAT_IMAGE_URL_OR_PATH" alt="Crying Cat" />
+
+    <!-- Final Message -->
+    <div id="finalMessage">I knew it Kuchu... come here...</div>
   </div>
 
   <script>
-    const yesButton = document.getElementById('yesButton');
-    const littleBitButton = document.getElementById('littleBitButton');
-    const messageArea = document.getElementById('messageArea');
+    /****************************************************
+     * 1. Floating Hearts Animation (continuous)
+     ****************************************************/
+    const heartsContainer = document.getElementById('heartsContainer');
 
-    // "Yes" button click: show final message and hide buttons.
-    yesButton.addEventListener('click', () => {
-      messageArea.innerHTML = "I knew it my Kuchu, come here 🤗🤗";
-      yesButton.style.display = 'none';
-      littleBitButton.style.display = 'none';
+    function createFloatingHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+
+      // Random horizontal start position
+      heart.style.left = Math.random() * 100 + '%';
+
+      // Random animation duration so hearts differ
+      const duration = 4 + Math.random() * 3; // 4s to 7s
+      heart.style.animationDuration = duration + 's';
+
+      // Random delay
+      const delay = Math.random() * 2;
+      heart.style.animationDelay = delay + 's';
+
+      heartsContainer.appendChild(heart);
+
+      // Remove the heart from the DOM after animation
+      setTimeout(() => {
+        heartsContainer.removeChild(heart);
+      }, (duration + delay) * 1000);
+    }
+
+    // Create hearts every half second
+    setInterval(createFloatingHeart, 500);
+
+    /****************************************************
+     * 2. Button Logic
+     ****************************************************/
+    const yesBtn = document.getElementById('yesBtn');
+    const littleBitBtn = document.getElementById('littleBitBtn');
+    const questionText = document.getElementById('questionText');
+    const catImg = document.getElementById('catImg');
+    const finalMessage = document.getElementById('finalMessage');
+
+    // Funny text cycle for "Little bit" button
+    const funnyTexts = [
+      "Really? Just a little?",
+      "A bit more maybe?",
+      "Stop teasing!",
+      "Don't you actually love me?",
+      "Say yes already!",
+      "No??"
+    ];
+    let clickCount = 0;
+
+    // When "Yes" is clicked
+    yesBtn.addEventListener('click', () => {
+      // Hide question and buttons
+      questionText.style.display = 'none';
+      yesBtn.style.display = 'none';
+      littleBitBtn.style.display = 'none';
+
+      // Show final message
+      finalMessage.style.display = 'block';
+
+      // Burst of hearts to celebrate
+      for (let i = 0; i < 30; i++) {
+        setTimeout(() => {
+          createBurstHeart();
+        }, i * 100);
+      }
     });
 
-    // "Little Bit" button click: show a series of cute messages.
-    littleBitButton.addEventListener('click', () => {
-      // Disable buttons to prevent multiple clicks
-      yesButton.disabled = true;
-      littleBitButton.disabled = true;
+    // Custom function to create a quick "burst" of hearts
+    function createBurstHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.left = (50 + (Math.random() * 20 - 10)) + '%';
+      heart.style.bottom = '50%';
+      heart.style.animationDuration = (1 + Math.random() * 2) + 's';
+      heartsContainer.appendChild(heart);
+      setTimeout(() => {
+        heartsContainer.removeChild(heart);
+      }, 3000);
+    }
 
-      const cuteMessages = [
-        "Are you sure?",
-        "I'll do anything for you—cook, clean, dance, and sing!",
-        "I'll bring you your favorite treats and surprise you every day.",
-        "I'll listen to every word you say and always be there for you.",
-        "Please say yes, my heart is set on you!"
-      ];
-      let currentMsg = 0;
-      messageArea.innerHTML = cuteMessages[currentMsg];
-      currentMsg++;
+    // When "Little bit" is clicked
+    littleBitBtn.addEventListener('click', () => {
+      if (clickCount < funnyTexts.length) {
+        // Change button text
+        littleBitBtn.textContent = funnyTexts[clickCount];
+        clickCount++;
+      }
 
-      // Display messages sequentially every 2 seconds.
-      const interval = setInterval(() => {
-        if (currentMsg < cuteMessages.length) {
-          messageArea.innerHTML += "<br>" + cuteMessages[currentMsg];
-          currentMsg++;
-        } else {
-          clearInterval(interval);
-          setTimeout(() => {
-            messageArea.innerHTML += "<br><br>So, will you give me your whole heart?";
-            // Re-enable buttons so the user can now select "Yes"
-            yesButton.disabled = false;
-            littleBitButton.disabled = false;
-          }, 1000);
-        }
-      }, 2000);
+      // If the text becomes "No??", show the crying cat
+      if (littleBitBtn.textContent === "No??") {
+        catImg.style.display = 'block';
+      }
     });
   </script>
 </body>

@@ -19,38 +19,38 @@
       overflow: hidden;
       position: relative;
     }
-
+    
     .container {
       text-align: center;
       animation: fadeIn 1s ease-in;
     }
-
+    
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
+    
     /* Curious Cat GIF styles */
     #curiousCat {
       display: block;
       margin: 0 auto 20px auto;
       max-width: 200px;
     }
-
+    
     h1 {
       color: #fff;
       font-size: 3em;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
       margin-bottom: 30px;
     }
-
+    
     .buttons {
       display: flex;
       gap: 20px;
       justify-content: center;
       flex-wrap: wrap;
     }
-
+    
     .yes-btn {
       background: #4CAF50;
       color: white;
@@ -62,7 +62,7 @@
       transition: all 0.3s ease;
       box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
-
+    
     .little-bit-btn {
       background: #FF69B4;
       color: white;
@@ -74,23 +74,23 @@
       transition: all 0.3s ease;
       box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
-
+    
     .yes-btn:hover {
       transform: scale(1.1) rotate(3deg);
       background: #45a049;
     }
-
+    
     .little-bit-btn:hover {
       animation: shake 0.5s ease infinite;
       background: #ff1493;
     }
-
+    
     @keyframes shake {
       0%, 100% { transform: translateX(0); }
       25% { transform: translateX(10px); }
       75% { transform: translateX(-10px); }
     }
-
+    
     .celebration {
       position: fixed;
       top: 0;
@@ -104,32 +104,32 @@
       z-index: 1000;
       animation: zoomIn 0.5s ease;
     }
-
+    
     @keyframes zoomIn {
       from { transform: scale(0); }
       to { transform: scale(1); }
     }
-
+    
     .hearts {
       position: fixed;
       width: 100%;
       height: 100%;
       pointer-events: none;
     }
-
+    
     .heart {
       position: absolute;
       animation: float 3s linear infinite;
       opacity: 0;
       font-size: 24px;
     }
-
+    
     @keyframes float {
       0% { transform: translateY(100vh); opacity: 0; }
       50% { opacity: 1; }
       100% { transform: translateY(-100vh); opacity: 0; }
     }
-
+    
     /* New animation for the hug emoji rain effect */
     @keyframes rainDown {
       0% {
@@ -142,6 +142,20 @@
       100% {
         transform: translateY(100vh);
         opacity: 0;
+      }
+    }
+    
+    /* Mobile optimization for a 6.7-inch screen */
+    @media (max-width: 430px) {
+      h1 {
+        font-size: 2.5em;
+      }
+      .yes-btn, .little-bit-btn {
+        padding: 15px 30px;
+        font-size: 1.5em;
+      }
+      #curiousCat {
+        max-width: 150px;
       }
     }
   </style>
@@ -157,22 +171,20 @@
       <button class="little-bit-btn" onclick="handleLittleBit()">A little bit? 🥺</button>
     </div>
   </div>
-
+  
+  <!-- Celebration Page -->
   <div class="celebration" id="celebration">
     <div style="text-align: center; color: white;">
-      <h1 style="font-size: 4em;">🎉 I KNEW IT! 💝</h1>
-      <p style="font-size: 2em;">I knew it my kuchu, come here 🤗🤗</p>
-      <div style="font-size: 3em; margin-top: 20px;">
-        ❤️🤗💞🔥😘
-      </div>
+      <h1 style="font-size: 2.5em;">i knew it 🤭 , you can't hide that from me you pumpkin pie 🤗🤗❤️...</h1>
+      <img class="happy-cat" src="https://i.pinimg.com/originals/0b/4e/c4/0b4ec44bf7fba70ee3f2f93bc8097f48.gif" alt="Happy Cat" style="max-width:200px; margin-top:20px;">
     </div>
   </div>
-
+  
   <script>
     // Floating hearts initialization
     function createHearts() {
       const heartsContainer = document.getElementById('heartsContainer');
-      for(let i = 0; i < 15; i++) {
+      for (let i = 0; i < 15; i++) {
         const heart = document.createElement('div');
         heart.className = 'heart';
         heart.innerHTML = '💖';
@@ -184,7 +196,7 @@
       }
     }
     createHearts();
-
+    
     // "A little bit" button logic
     let clickCount = 0;
     const littleBitMessages = [
@@ -199,7 +211,7 @@
       "Final offer: Biryani? 💖",
       "Pretty please ! 😹"
     ];
-
+    
     function handleLittleBit() {
       const btn = document.querySelector('.little-bit-btn');
       // Cycle through messages
@@ -219,19 +231,19 @@
       
       clickCount++;
       
-      // Increase Yes button size faster (changed multiplier from 1.2 to 1.3)
+      // Increase Yes button size slower (multiplier changed from 1.3 to 1.2)
       const yesBtn = document.querySelector('.yes-btn');
       const currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
-      yesBtn.style.fontSize = `${currentSize * 1.3}px`;
+      yesBtn.style.fontSize = `${currentSize * 1.2}px`;
     }
-
+    
     // Yes button handler with hug emoji rain effect
     function showLove() {
       const celebration = document.getElementById('celebration');
       celebration.style.display = 'flex';
       
       // Add celebration hearts
-      for(let i = 0; i < 50; i++) {
+      for (let i = 0; i < 50; i++) {
         const heart = document.createElement('div');
         heart.className = 'heart';
         heart.innerHTML = ['💖', '💝', '💘', '💕', '💞'][Math.floor(Math.random() * 5)];

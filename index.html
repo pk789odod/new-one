@@ -1,160 +1,260 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Do You Love Me?</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
   <style>
-    /* Global Styles */
-    * {
-      box-sizing: border-box;
+    body {
       margin: 0;
       padding: 0;
-    }
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #ff0000 0%, #c20000 100%);
-      height: 100vh;
-      width: 100%;
+      /* Pink gradient background */
+      background: linear-gradient(135deg, #ffafbd 0%, #ffc3a0 100%);
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: 'Pacifico', cursive;
       overflow: hidden;
-      color: #fff;
-    }
-    .container {
       position: relative;
+    }
+
+    .container {
       text-align: center;
-      z-index: 2;
+      animation: fadeIn 1s ease-in;
     }
-    /* Curious Cat Logo */
-    #curiousCat {
-      width: 150px;
-      margin-bottom: 1rem;
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-    /* Question Text */
+
     h1 {
-      font-size: 2.5rem;
-      margin-bottom: 2rem;
+      color: #fff;
+      font-size: 3em;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      margin-bottom: 30px;
     }
-    /* Buttons */
-    .btn {
-      cursor: pointer;
-      background-color: #fff;
-      color: #e91e63;
+
+    .buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .yes-btn {
+      background: #4CAF50;
+      color: white;
+      padding: 20px 50px;
+      font-size: 1.8em;
       border: none;
-      padding: 1rem 2rem;
-      margin: 0 1rem;
-      font-size: 1.2rem;
-      border-radius: 8px;
-      transition: transform 0.2s ease;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
-    .btn:hover {
-      transform: scale(1.1);
+
+    .little-bit-btn {
+      background: #FF69B4;
+      color: white;
+      padding: 20px 50px;
+      font-size: 1.8em;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
-    /* Crying Cat GIF (for "Little bit") */
-    #cryingCat {
-      display: none;
-      width: 180px;
-      margin-top: 1rem;
-      animation: shake 0.5s infinite alternate;
+
+    .yes-btn:hover {
+      transform: scale(1.1) rotate(3deg);
+      background: #45a049;
     }
+
+    .little-bit-btn:hover {
+      animation: shake 0.5s ease infinite;
+      background: #ff1493;
+    }
+
     @keyframes shake {
-      from { transform: translateX(0); }
-      to   { transform: translateX(5px); }
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(10px); }
+      75% { transform: translateX(-10px); }
     }
-    /* Happy Cat GIF (after Yes) */
-    #happyCat {
+
+    .celebration {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 56, 96, 0.95);
       display: none;
-      width: 200px;
-      margin-top: 1rem;
-      animation: bounce 0.6s infinite alternate;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      animation: zoomIn 0.5s ease;
     }
-    @keyframes bounce {
-      from { transform: translateY(0); }
-      to   { transform: translateY(-10px); }
+
+    @keyframes zoomIn {
+      from { transform: scale(0); }
+      to { transform: scale(1); }
     }
-    /* Final Message */
-    #finalMessage {
-      display: none;
-      margin-top: 2rem;
-      font-size: 1.8rem;
-      font-weight: bold;
+
+    .hearts {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
     }
-    /* Yes Button Pop Animation (optional) */
-    @keyframes pop {
-      0%   { transform: scale(1); }
-      50%  { transform: scale(1.3); }
-      100% { transform: scale(1); }
+
+    .heart {
+      position: absolute;
+      animation: float 3s linear infinite;
+      opacity: 0;
+      font-size: 24px;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateY(-100vh); opacity: 0; }
+    }
+
+    /* New animation for the hug emoji rain effect */
+    @keyframes rainDown {
+      0% {
+        transform: translateY(0);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh);
+        opacity: 0;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container" id="mainContainer">
-    <!-- Curious Cat Logo -->
-    <img id="curiousCat" src="https://media1.giphy.com/media/3o7bufrhglm1BTsfra/giphy.gif?cid=6c09b952wlmyfwo3qgofgo1321txm35u3fkdgvws8pxbflnq&ep=v1_internal_gif_by_id&rid=giphy.gif&ct=g" alt="Curious Cat Logo">
-    <!-- Main Question -->
-    <h1 id="questionText">Do you love me?</h1>
-    <!-- Buttons -->
-    <button class="btn" id="yesBtn">Yes</button>
-    <button class="btn" id="littleBitBtn">Little bit</button>
-    <!-- Crying Cat GIF (for "Little bit" presses) -->
-    <img id="cryingCat" src="https://i.pinimg.com/originals/c0/0e/f5/c00ef5b21e0f23e5170bf4d172fce61d.gif">
-    <!-- Final Message -->
-    <div id="finalMessage">I knew it, Kuchu... come here...</div>
-    <!-- Happy Cat GIF (after Yes) -->
-    <img id="happyCat" src="https://i.pinimg.com/originals/0b/4e/c4/0b4ec44bf7fba70ee3f2f93bc8097f48.gif" alt="Happy Cat GIF">
+  <div class="hearts" id="heartsContainer"></div>
+  <div class="container">
+    <h1>💖 Do You Love Me? 💖</h1>
+    <div class="buttons">
+      <button class="yes-btn" onclick="showLove()">Yes! 😍</button>
+      <button class="little-bit-btn" onclick="handleLittleBit()">A little bit? 🥺</button>
+    </div>
+  </div>
+
+  <div class="celebration" id="celebration">
+    <div style="text-align: center; color: white;">
+      <h1 style="font-size: 4em;">🎉 I KNEW IT! 💝</h1>
+      <p style="font-size: 2em;">I knew it my kuchu, come here 🤗🤗</p>
+      <div style="font-size: 3em; margin-top: 20px;">
+        ❤️🤗💞🔥😘
+      </div>
+    </div>
   </div>
 
   <script>
-    // Grab elements from the DOM
-    const curiousCat = document.getElementById('curiousCat');
-    const questionText = document.getElementById('questionText');
-    const yesBtn = document.getElementById('yesBtn');
-    const littleBitBtn = document.getElementById('littleBitBtn');
-    const cryingCat = document.getElementById('cryingCat');
-    const finalMessage = document.getElementById('finalMessage');
-    const happyCat = document.getElementById('happyCat');
+    // Floating hearts initialization
+    function createHearts() {
+      const heartsContainer = document.getElementById('heartsContainer');
+      for(let i = 0; i < 15; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.innerHTML = '💖';
+        heart.style.cssText = `
+          left: ${Math.random() * 100}%;
+          animation-delay: ${Math.random() * 2}s;
+        `;
+        heartsContainer.appendChild(heart);
+      }
+    }
+    createHearts();
 
-    // Funny texts for "Little bit" button
-    const littleBitTexts = [
-      "I'll cook for you",
-      "I'll clean the house",
-      "I'll do your laundry",
-      "I'll watch your favorite shows",
-      "Please just say YES!"
+    // "A little bit" button logic
+    let clickCount = 0;
+    const littleBitMessages = [
+      "Are you sure?",
+      "Maybe a bit more? 😊",
+      "How about medium love?",
+      "Pretty please? 🥺",
+      "I'll wait... ⏳",
+      "My heart says more! 💓",
+      "Let's negotiate! 🤝",
+      "Cookies? 🍪",
+      "Final offer: Lots? 💖",
+      "Any amount! 😍"
     ];
-    let littleBitIndex = 0;
-    let yesButtonScale = 1;
 
-    // "Little bit" button event
-    littleBitBtn.addEventListener('click', () => {
-      // Show crying cat immediately on press
-      cryingCat.style.display = 'block';
-      // Rotate through funny texts
-      littleBitBtn.textContent = littleBitTexts[littleBitIndex] || "Please just say YES!";
-      littleBitIndex = (littleBitIndex + 1) % littleBitTexts.length;
-      // Increase the scale of the Yes button so it eventually covers the screen
-      yesButtonScale += 0.2;
-      yesBtn.style.transform = `scale(${yesButtonScale})`;
-    });
+    function handleLittleBit() {
+      const btn = document.querySelector('.little-bit-btn');
+      // Cycle through messages
+      btn.textContent = littleBitMessages[clickCount % littleBitMessages.length];
+      // Add shake animation
+      btn.style.animation = 'shake 0.5s ease';
+      
+      // Create a new heart
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.innerHTML = '💖';
+      heart.style.cssText = `
+        left: ${Math.random() * 80 + 10}%;
+        animation-duration: ${Math.random() * 2 + 2}s;
+      `;
+      document.getElementById('heartsContainer').appendChild(heart);
+      
+      clickCount++;
+      
+      // Increase Yes button size faster (using a multiplier of 1.2)
+      const yesBtn = document.querySelector('.yes-btn');
+      const currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
+      yesBtn.style.fontSize = `${currentSize * 1.2}px`;
+    }
 
-    // "Yes" button event
-    yesBtn.addEventListener('click', () => {
-      // Hide all interactive elements
-      questionText.style.display = 'none';
-      littleBitBtn.style.display = 'none';
-      yesBtn.style.display = 'none';
-      curiousCat.style.display = 'none';
-      cryingCat.style.display = 'none';
-
-      // Show final message and happy cat
-      finalMessage.style.display = 'block';
-      happyCat.style.display = 'block';
-
-      // Optionally, add a pop animation to the yes button before hiding it
-      // yesBtn.style.animation = 'pop 0.6s ease-in-out';
-    });
+    // Yes button handler with hug emoji rain effect
+    function showLove() {
+      const celebration = document.getElementById('celebration');
+      celebration.style.display = 'flex';
+      
+      // Add celebration hearts
+      for(let i = 0; i < 50; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.innerHTML = ['💖', '💝', '💘', '💕', '💞'][Math.floor(Math.random() * 5)];
+        heart.style.cssText = `
+          left: ${Math.random() * 100}%;
+          animation-delay: ${Math.random()}s;
+        `;
+        document.getElementById('heartsContainer').appendChild(heart);
+      }
+      
+      // Create multiple hug emojis that "rain" down the page
+      const numHugs = 20;
+      for (let i = 0; i < numHugs; i++) {
+        const hug = document.createElement('div');
+        hug.innerHTML = '🤗';
+        hug.style.cssText = `
+          position: fixed;
+          top: -50px;
+          left: ${Math.random() * 100}%;
+          font-size: ${Math.random() * 1 + 2}em;
+          opacity: 0;
+          animation: rainDown 1s forwards;
+          animation-delay: ${Math.random() * 0.3}s;
+          z-index: 500;
+        `;
+        document.body.appendChild(hug);
+        // Remove the emoji after the animation (allowing extra time for delay)
+        setTimeout(() => {
+          hug.remove();
+        }, 1500);
+      }
+    }
   </script>
 </body>
 </html>
